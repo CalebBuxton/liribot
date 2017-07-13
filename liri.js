@@ -6,22 +6,22 @@ var fs = require('fs');
 var twitterKeys = keys.twitterKeys;
 var spotifyKeys = keys.spotifyKeys;
 var omdbKeys = keys.OMDBKeys;
-var input = process.argv[2];
+var input = process.argv[3];
+var command = process.argv[2];
 
-init(input);
+init(command);
 
-function init(input) {
-	console.log(input)
-	if (input === 'my-tweets') {
+function init(command, input) {
+	if (command === 'my-tweets') {
 		getTweets();
 	}
-	else if (input === 'spotify-this-song') {
+	else if (command === 'spotify-this-song') {
 		getSong(process.argv[3]);
 	}
-	else if (input === 'movie-this'){
+	else if (command === 'movie-this'){
 		getMovie(process.argv[3]);
 	}
-	else if (input === 'do-what-it-says') {
+	else if (command === 'do-what-it-says') {
 		doIt();
 	}
 	else {
@@ -80,7 +80,7 @@ function getTweets() {
 
 function getSong(songTitle) {
 	var song = '';
-	//Testing if user input a song to search
+	//Testing if user command a song to search
 	if(!songTitle) {
 		song = 'The Sign';
 	}
@@ -114,7 +114,7 @@ function getSong(songTitle) {
 function getMovie(movieTitle) {
 	var movie = '';
 
-	//Test to see if user input a movie title
+	//Test to see if user command a movie title
 	if(!movieTitle) {
 		movie = 'Mr. Nobody';
 	}
@@ -144,11 +144,8 @@ function getMovie(movieTitle) {
 function doIt(){
 	fs.readFile('./random.txt', "utf8", (err, data) => {
 		if (err) throw err;
-		console.log(data);
 		var str = data;
 		str = str.split(',');
-		console.log(str);
-		console.log(str[0])
+		init(str[0], str[1])
 	})
-
 }
