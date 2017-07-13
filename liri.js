@@ -6,20 +6,27 @@ var fs = require('fs');
 var twitterKeys = keys.twitterKeys;
 var spotifyKeys = keys.spotifyKeys;
 var omdbKeys = keys.OMDBKeys;
-var input = process.argv[3];
 var command = process.argv[2];
+var userInput = process.argv[3];
 
-init(command);
+if (!fs.existsSync('logs.txt')){
+	fs.writeFile('logs.txt', '', 'utf8', (err) => {
+		if (err) throw err;
+		console.log('Log file created');
+	});
+}
 
-function init(command, input) {
+init(command, userInput);
+
+function init(command, userInput) {
 	if (command === 'my-tweets') {
 		getTweets();
 	}
 	else if (command === 'spotify-this-song') {
-		getSong(process.argv[3]);
+		getSong(userInput);
 	}
 	else if (command === 'movie-this'){
-		getMovie(process.argv[3]);
+		getMovie(userInput);
 	}
 	else if (command === 'do-what-it-says') {
 		doIt();
@@ -75,7 +82,7 @@ function getTweets() {
 			}
 		}
 	});
-
+	logFile();
 }
 
 function getSong(songTitle) {
@@ -105,10 +112,11 @@ function getSong(songTitle) {
 			console.log('No Preview Available')
 		}
 		else {
-		console.log('Preview: ' + data.tracks.items[0].preview_url); 
+			console.log('Preview: ' + data.tracks.items[0].preview_url); 
 		}
 		console.log('From the Album: ' + data.tracks.items[0].album.name); 
 	});
+	logFile();
 }
 
 function getMovie(movieTitle) {
@@ -139,6 +147,7 @@ function getMovie(movieTitle) {
 			console.log('Starring: ' + data.Actors); 
 		}
 	})
+	logFile();
 }
 
 function doIt(){
@@ -147,5 +156,23 @@ function doIt(){
 		var str = data;
 		str = str.split(',');
 		init(str[0], str[1])
+		userInput = str[1];
+		command = str[0];
 	})
+}
+
+function logFile(){
+	if (!userInput) {
+		fs.appendFile('logs.txt', command + '\n', (err) => {
+			if (err) throw err;
+			console.log('The "data to append" was appended to file!');
+		});
+	}
+	else {
+		fs.appendFile('logs.txt', command + ' ' + userInput + '\n', (err) => {
+			if (err) throw err;
+			console.log('The event was added to the log file');
+		});
+	}
+
 }
