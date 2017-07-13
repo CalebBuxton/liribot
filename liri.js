@@ -2,14 +2,15 @@ var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
 var request = require('request');
+var fs = require('fs');
 var twitterKeys = keys.twitterKeys;
 var spotifyKeys = keys.spotifyKeys;
 var omdbKeys = keys.OMDBKeys;
 var input = process.argv[2];
 
-init();
+init(input);
 
-function init() {
+function init(input) {
 	console.log(input)
 	if (input === 'my-tweets') {
 		getTweets();
@@ -141,5 +142,13 @@ function getMovie(movieTitle) {
 }
 
 function doIt(){
+	fs.readFile('./random.txt', "utf8", (err, data) => {
+		if (err) throw err;
+		console.log(data);
+		var str = data;
+		str = str.split(',');
+		console.log(str);
+		console.log(str[0])
+	})
 
 }
