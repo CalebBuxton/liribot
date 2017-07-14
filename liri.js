@@ -165,7 +165,7 @@ function logFile(){
 	if (!userInput) {
 		fs.appendFile('logs.txt', command + '\n', (err) => {
 			if (err) throw err;
-			console.log('The "data to append" was appended to file!');
+			console.log('The event was added to the log file');
 		});
 	}
 	else {
